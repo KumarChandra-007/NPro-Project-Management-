@@ -1,0 +1,35 @@
+<form [formGroup]="taskForm" class="h-100 user-container">
+    <table class="w-100 table-responsive table table-striped">
+      <thead class="tableHeader">
+        <tr class="bg-primary">
+          <th scope="col">Task</th>
+          <th scope="col">Acceptance Criteria Details</th>
+          <th scope="col">Signoff</th>
+          <th scope="col">status</th>
+          <th scope="col">Action</th>
+          
+        </tr>
+      </thead>
+      <tbody formArrayName="tasks">
+        <ng-container *ngFor="let projectCtrl of tasksFormArray.controls; let i = index">
+          <tr [formGroupName]="i">
+            <td><input type="text" class="form-control" formControlName="name" [readonly]="!isEditing(i)"></td>
+            <td><input type="text" class="form-control" formControlName="AcceptanceDesc" [readonly]="!isEditing(i)"></td>
+            <td><input type="number" class="form-control" formControlName="Signoff" [readonly]="!isEditing(i)"></td>
+            <td><input type="text" class="form-control" formControlName="status" [readonly]="!isEditing(i)"></td>
+         
+            <td>
+              <span style="cursor:pointer" ><img alt="" (click)="deleteProject(i)" data-placement="bottom" tooltip="Remove"  [ngClass]="{'disabled': isEditing(i)}"
+                src="assets/delete_ico.svg"></span>
+              <span style="cursor:pointer" > <img alt="" (click)="editProject(i)" data-placement="bottom" tooltip="Edit"  *ngIf="!isEditing(i)"
+                src="assets/edit_ico.svg"></span><span></span>
+              <!-- <button type="button" class="btn btn-success" (click)="saveProject(i)" *ngIf="isEditing(i)">Save</button> -->
+              <button type="button" class="btn btn-secondary pointer" (click)="cancelEdit(i)"*ngIf="isEditing(i)">Cancel</button>
+            </td>
+          </tr>
+        </ng-container>
+      </tbody>
+    </table>
+    <button type="button" class="btn" (click)="addRow()">Add Row</button>
+  </form>
+  

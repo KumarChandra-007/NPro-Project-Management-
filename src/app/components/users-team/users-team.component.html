@@ -1,0 +1,35 @@
+<div class="h-100 user-container">
+    <table class="w-100 table-responsive table table-striped">
+        <thead class="tableHeader">
+            <tr class="bg-primary">
+                <th>S.No</th>
+                <th>UserId</th>
+                <th>FirstName</th>
+                <th>LastName</th>
+                <th>JobTitleName</th>
+                <th>PreferredFullName</th>
+                <th>EmployeeCode</th>
+                <th>Region</th>
+                <th>PhoneNumber</th>
+                <th>EmailAddress</th>
+
+            </tr>
+            
+        </thead>
+        <tbody>
+            <tr *ngFor="let data of employeeData">
+                <td>{{data.slNo}}</td>
+                <td>{{data.userId}}</td>
+                <td>{{data.firstName}}</td>
+                <td>{{data.lastName}}</td>
+                <td>{{data.jobTitleName}}</td>
+                <td>{{data.preferredFullName}}</td>
+                <td>{{data.employeeCode}}</td>
+                <td>{{data.region}}</td>
+                <td>{{data.phoneNumber}}</td>
+                <td>{{data.emailAddress}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+

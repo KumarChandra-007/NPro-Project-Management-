@@ -1,0 +1,14 @@
+
+
+<mat-form-field>
+  <mat-label>Select Project</mat-label>
+  <mat-select>
+    
+      <mat-option *ngFor="let food of foods" [value]="food.value">{{food.viewValue}}</mat-option>
+   
+  </mat-select>
+</mat-form-field>
+
+
+<highcharts-chart [Highcharts]="Highcharts" [options]="chartOptions" style="width: 100%; display: block;">
+</highcharts-chart>
