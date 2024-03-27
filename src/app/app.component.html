@@ -1,0 +1,47 @@
+<!-- <div class="container">
+  <header>
+    <h1>Npro Project Management</h1>
+    <nav>
+      <ul>
+        <li routerLinkActive="active" routerLink="users-team"><a >Users/Team</a></li>
+        <li routerLinkActive="active" routerLink="project"><a >Project</a></li>
+        <li routerLinkActive="active" routerLink="task"><a>Task</a></li> 
+        <li routerLinkActive="active" routerLink="dashboard"><a>Dashboard</a></li>
+      </ul>
+    </nav>
+  </header>
+  <section>
+    <router-outlet></router-outlet>
+  </section>
+  
+</div> -->
+
+<div class="container-fluid d-flex w-100 h-100 m-0 p-0">
+     <div class="arrow" (click)="arrowClick()">
+
+          <i class="fa-solid fa-circle-chevron-right"></i>
+        </div>
+    <aside class="h-100 position-relative p-2" [ngClass]="showAside ? 'class-if-true'  : 'class-if-false'">
+    <div class="logo w-100">
+      <img src="../assets/logo.png" alt="">
+    </div>
+    <ul>
+      <li><a routerLink="login"><i class="fas fa-sign-in-alt login-icon"></i>Login</a></li>
+      <li routerLinkActive="active" routerLink="users-team"><a><i class="fa-solid fa-user"></i> Users/Team</a></li>
+      <li routerLinkActive="active" routerLink="project"><a ><i class="fa-solid fa-diagram-project"></i> Project</a></li>
+      <li routerLinkActive="active" routerLink="task"><a><i class="fas fa-tasks"></i> Task</a></li> 
+      <li routerLinkActive="active" routerLink="dashboard"><a><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+ 
+    </ul>
+   </aside>
+   <section class="h-100 p-2">
+    <router-outlet>
+
+    </router-outlet>
+   
+   </section>
+   <!-- <div class="d-flex">
+    <app-login></app-login>
+   </div> -->
+  </div>
+  
