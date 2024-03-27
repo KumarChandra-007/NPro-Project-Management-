@@ -1,0 +1,45 @@
+<div class="container">
+    <header>
+        <div class="header">
+            <mat-form-field class="dropdown">
+              <mat-label>Project</mat-label>
+              <mat-select>
+                Options for projects
+                <mat-option value="all">VIDA WEB</mat-option>
+                <mat-option value="mine">CYCLUS</mat-option>
+                <!-- <mat-option *ngFor="let project of projects" [value]="project.id">{{ project.name }}</mat-option> -->
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field class="dropdown">
+              <mat-label>Task</mat-label>
+              <mat-select>
+                <!-- Options for tasks -->
+                
+                <!-- <mat-option *ngFor="let task of tasks" [value]="task.id">{{ task.name }}</mat-option> -->
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field class="dropdown">
+              <mat-label>Overall Contributions</mat-label>
+              <mat-select>
+                <mat-option value="all">All</mat-option>
+                <mat-option value="mine">Mine</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+    </header>
+    <section class="d-flex">
+<div class="left w-50">
+    <h3>Comments</h3>
+    <div class="editLogo">
+      <i class='fas fa-edit'></i>
+    </div>
+    
+</div>
+<div class="right w-50">
+    <h3>Contributions</h3>
+</div>
+    </section>
+</div>
+
+  
+<button mat-button [mat-dialog-close]="true" cdkFocusInitial>Ok</button>
