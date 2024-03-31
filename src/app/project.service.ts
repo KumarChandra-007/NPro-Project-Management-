@@ -61,19 +61,18 @@ export class ProjectService {
     //   return this.projects;
     // }
     createProject(payload: any):Observable<any>{
-      return this.httpClient.post<any>(this.apiURL + "api/CommentManagement/GetCommentDetails",payload);
+      return this.httpClient.post<any>("http://localhost:16737/projectapi/PostProject",payload);
     }
     getAllProjects(): Observable<any>  {
-      return this.httpClient.get<any>(this.apiURL + "api/CommentManagement/GetCommentDetails");
+      return this.httpClient.get<any>("http://localhost:16737/projectapi/GetProjects");
+      // return this.httpClient.get<any>(this.apiURL + "api/CommentManagement/GetCommentDetails");
     }
     deleteProject(id: number): void {
       this.projects = this.projects.filter(project => project.id !== id);
     }
-    updateProject(updatedProject: Project): void {
-      const index = this.projects.findIndex(project => project.id === updatedProject.id);
-      if (index !== -1) {
-        this.projects[index] = updatedProject;
-      }
+    updateProject(payload:any): Observable<any> {
+      return this.httpClient.put<any>("http://localhost:16737/projectapi/PutProject",payload);
+      
     }
     Tasks:Task[]=
     [

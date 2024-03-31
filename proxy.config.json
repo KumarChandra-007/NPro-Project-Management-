@@ -1,5 +1,36 @@
 {
-    "/api/*": {
+    "/projectapi/*": 
+        {
+        "target": "http://localhost:16737/",
+        "secure": false,
+        "logLevel": "debug",
+        "changeOrigin": true
+    },
+    "/taskapi/*": {
+        "target": "https://localhost:7187",
+        "secure": false,
+        "logLevel": "debug",
+        "changeOrigin": true
+    },
+    "/userapi/*": {
+        "target": "https://localhost:7187",
+        "secure": false,
+        "logLevel": "debug",
+        "changeOrigin": true
+    },
+    "/masterapi/*": {
+        "target": "https://localhost:7187",
+        "secure": false,
+        "logLevel": "debug",
+        "changeOrigin": true
+    },
+    "/contributionapi/*": {
+        "target": "https://localhost:7187",
+        "secure": false,
+        "logLevel": "debug",
+        "changeOrigin": true
+    },
+    "/commentapi/*": {
         "target": "https://localhost:7187",
         "secure": false,
         "logLevel": "debug",

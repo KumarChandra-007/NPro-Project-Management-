@@ -1,15 +1,17 @@
-
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ProjectService } from 'src/app/project.service';
+//import { setTimeout } from 'timers';
 export interface Project {
-  id: number;
-  name: string;
+  projectID: number;
+  title: string;
   description: string;
   taskCount: number;
   startDate: Date;
-  endDate: Date;
+  deadline: Date;
+  creatorID:number;
+  status:string;
 }
 @Component({
   selector: 'app-project',
@@ -21,40 +23,73 @@ export class ProjectComponent implements OnInit {
   projectForm!: FormGroup;
   projectFormGroups: FormGroup[] = []; // Store project form groups
   editingIndex!: number;
-
+  initCount:number=0;
   constructor(private projectService: ProjectService, private formBuilder: FormBuilder, private router: Router) {}
 
   ngOnInit(): void {
-    this.projectService.getAllProjects().subscribe(data=>
-      {
-        this.projects=data;
-      });
-    console.log(this.projects)
+    this.getProjectData();
+      
+  }
+  ngDoCheck():void
+  {
+    debugger;
+    this.initCount++;
+    if(this.initCount<=3)
+    {
     this.initForm();
-    // this.editingIndex=0;
-   
+    }
+  }
+  
+  getProjectData() {
+    //debugger
+    this.projectService.getAllProjects().subscribe(
+      (data: Project[]) => {
+        console.log(data);
+        this.projects = data;
+        console.log(this.projects);
+      }
+    );
+
   }
 
-  initForm(): void {
+  // initForm(){
+    
+  //   this.projectForm = this.formBuilder.group({
+  //     projects: this.formBuilder.array([])
+  //   });
+  //   this.projects.forEach(project => {
+  //     console.log(project);
+  //     const projectFormGroup = this.createProjectFormGroup(project);
+  //     (this.projectForm.get('projects') as FormArray).push(projectFormGroup);
+  //     this.projectFormGroups.push(projectFormGroup); 
+  //   });
+  //  console.log(this.projectsFormArray);
+  //  return 1;
+  // }
+
+  initForm() {
     this.projectForm = this.formBuilder.group({
-      projects: this.formBuilder.array([])
+      projects: this.formBuilder.array([]) // Initialize projects form array
     });
+
     this.projects.forEach(project => {
       const projectFormGroup = this.createProjectFormGroup(project);
       (this.projectForm.get('projects') as FormArray).push(projectFormGroup);
       this.projectFormGroups.push(projectFormGroup); // Store project form group
     });
-   console.log(this.projectsFormArray);
+    //this.isfirst=false;
+    console.log(this.projectForm.value); // Log the form value to check
+    return 1; // Return a value if needed
   }
 
   createProjectFormGroup(project: Project): FormGroup {
     return this.formBuilder.group({
-      id: [project.id],
-      name: [project.name, Validators.required],
+      projectID: [project.projectID],
+      title: [project.title, Validators.required],
       description: [project.description, Validators.required],
       taskCount: [project.taskCount, Validators.required],
-      startDate: [project.startDate.toISOString().substring(0, 10), Validators.required],
-      endDate: [project.endDate.toISOString().substring(0, 10), Validators.required]
+      startDate: [project.startDate.toString().substring(0, 10), Validators.required],
+      deadline: [project.deadline.toString().substring(0, 10), Validators.required]
     });
   }
 
@@ -66,12 +101,14 @@ export class ProjectComponent implements OnInit {
  
   addRow(): void {
     const newProject: Project = {
-      id: this.projects.length + 1,
-      name: '',
+      projectID: 0,
+      title: '',
       description: '',
       taskCount: 0,
       startDate: new Date(),
-      endDate: new Date()
+      deadline: new Date(),
+      creatorID:0,
+      status:""
     };
   
     this.projects.push(newProject);
@@ -87,22 +124,29 @@ export class ProjectComponent implements OnInit {
     return this.editingIndex === index;
   }
 
-  saveProject(index: number): void {
-    this.editingIndex = 0;
-    const projectFormGroup = this.projectFormGroups[index];
-
-    let payload=
-    {
-      "ProjectID" : index,
-      "Title" : "post1",
-      "Description" : "post1",
-      "Deadline" : "2024-03-24",
-      "Status" : "testing",
-      "CreatorID" : 1
-  }
-  this.projectService.createProject(payload).subscribe(response=>
-    {console.log(response);
-    });
+  saveProject(data:any): void {
+    console.log(data)
+    let payload={
+      projectID :data.projectID, 
+      title:data.title,
+      description:data.title,
+      startDate: data.startDate,
+      deadline:data.deadline,
+      status: "open",
+      creatorID: 1
+    }
+    if(data.ProjectID ==0){
+    this.projectService.createProject(payload).subscribe(res=> {console.log(res);
+      this.editingIndex = 0;
+    })
+       const projectFormGroup = this.projectFormGroups[data.ProjectID];
+    }
+    else{
+      this.projectService.updateProject(payload).subscribe(res=> {console.log(res);
+        this.editingIndex = 0;
+      })
+      ;
+    }
     // if (projectFormGroup) {
     //   // projectFormGroup.disable();
     // }
@@ -113,7 +157,7 @@ export class ProjectComponent implements OnInit {
     this.projectFormGroups[index].enable();
   }
   navigateToTasks(projectCtrl: any): void {
-    debugger
+    // debugger
     console.log(projectCtrl);
     this.router.navigate(['task'], { queryParams: { id: projectCtrl } });
   }

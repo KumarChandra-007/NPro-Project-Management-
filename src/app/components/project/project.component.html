@@ -13,17 +13,17 @@
     <tbody formArrayName="projects">
       <ng-container *ngFor="let projectCtrl of projectsFormArray.controls; let i = index">
         <tr [formGroupName]="i">
-          <td><input type="text" class="form-control" formControlName="name" [readonly]="!isEditing(i)"></td>
+          <td><input type="text" class="form-control" formControlName="title" [readonly]="!isEditing(i)"></td>
           <td><input type="text" class="form-control" formControlName="description" [readonly]="!isEditing(i)"></td>
           <td><input type="number" class="form-control" formControlName="taskCount" (click)="navigateToTasks(projectCtrl.value.id)"  readonly></td>
           <td><input type="date" class="form-control" formControlName="startDate" [readonly]="!isEditing(i)"></td>
-          <td><input type="date" class="form-control" formControlName="endDate" [readonly]="!isEditing(i)"></td>
+          <td><input type="date" class="form-control" formControlName="deadline" [readonly]="!isEditing(i)"></td>
           <td>
             <span style="cursor:pointer" ><img alt="" (click)="deleteProject(i)" data-placement="bottom" tooltip="Remove"  [ngClass]="{'disabled': isEditing(i)}"
               src="assets/delete_ico.svg"></span>
             <span style="cursor:pointer" > <img alt="" (click)="editProject(i)" data-placement="bottom" tooltip="Edit"  *ngIf="!isEditing(i)"
               src="assets/edit_ico.svg"></span><span></span>
-            <!-- <button type="button" class="btn btn-success" (click)="saveProject(i)" *ngIf="isEditing(i)">Save</button> -->
+            <button type="button" class="btn btn-success" (click)="saveProject(projectCtrl.value)" *ngIf="isEditing(i)">Save</button>
             <button type="button" class="btn btn-secondary pointer" (click)="cancelEdit(i)"*ngIf="isEditing(i)">Cancel</button>
           </td>
         </tr>
