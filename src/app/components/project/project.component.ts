@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ProjectService } from 'src/app/project.service';
+// import { CsToastService } from '@cs/cs-response-controls';
+
 //import { setTimeout } from 'timers';
 export interface Project {
   projectID: number;
@@ -24,7 +26,8 @@ export class ProjectComponent implements OnInit {
   projectFormGroups: FormGroup[] = []; // Store project form groups
   editingIndex!: number;
   initCount:number=0;
-  constructor(private projectService: ProjectService, private formBuilder: FormBuilder, private router: Router) {}
+  constructor(private projectService: ProjectService, private formBuilder: FormBuilder, private router: Router,
+   ) {}
 
   ngOnInit(): void {
     this.getProjectData();
@@ -32,7 +35,7 @@ export class ProjectComponent implements OnInit {
   }
   ngDoCheck():void
   {
-    debugger;
+    // debugger;
     this.initCount++;
     if(this.initCount<=3)
     {
@@ -135,16 +138,22 @@ export class ProjectComponent implements OnInit {
       status: "open",
       creatorID: 1
     }
-    if(data.ProjectID ==0){
+    debugger
+    if(data.projectID ==0){
     this.projectService.createProject(payload).subscribe(res=> {console.log(res);
       this.editingIndex = 0;
-    })
+     this.getProjectData();
+
+  });
        const projectFormGroup = this.projectFormGroups[data.ProjectID];
     }
     else{
       this.projectService.updateProject(payload).subscribe(res=> {console.log(res);
         this.editingIndex = 0;
-      })
+        this.getProjectData();
+       
+    })
+
       ;
     }
     // if (projectFormGroup) {
