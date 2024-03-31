@@ -1,3 +1,4 @@
+
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -24,7 +25,11 @@ export class ProjectComponent implements OnInit {
   constructor(private projectService: ProjectService, private formBuilder: FormBuilder, private router: Router) {}
 
   ngOnInit(): void {
-    this.projects = this.projectService.getAllProjects();
+    this.projectService.getAllProjects().subscribe(data=>
+      {
+        this.projects=data;
+      });
+    console.log(this.projects)
     this.initForm();
     // this.editingIndex=0;
    
@@ -83,9 +88,21 @@ export class ProjectComponent implements OnInit {
   }
 
   saveProject(index: number): void {
-    // Save project logic
     this.editingIndex = 0;
     const projectFormGroup = this.projectFormGroups[index];
+
+    let payload=
+    {
+      "ProjectID" : index,
+      "Title" : "post1",
+      "Description" : "post1",
+      "Deadline" : "2024-03-24",
+      "Status" : "testing",
+      "CreatorID" : 1
+  }
+  this.projectService.createProject(payload).subscribe(response=>
+    {console.log(response);
+    });
     // if (projectFormGroup) {
     //   // projectFormGroup.disable();
     // }

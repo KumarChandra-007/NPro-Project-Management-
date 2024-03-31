@@ -1,4 +1,8 @@
 import { Injectable } from '@angular/core';
+import { API_GATEWAY } from 'src/environments/environment';
+import { HttpClient ,HttpHeaders} from '@angular/common/http';
+import { Observable } from 'rxjs';
+
 export interface Project {
   id: number;
   name: string;
@@ -22,7 +26,7 @@ export interface Task {
 })
 
 export class ProjectService {
-
+  private apiURL = API_GATEWAY.PROJECT_URL;
   
     projects: Project[] = [
       {
@@ -51,10 +55,16 @@ export class ProjectService {
       }
     ];
   
-    constructor() { }
+    constructor(private httpClient: HttpClient) { }
   
-    getAllProjects(): Project[] {
-      return this.projects;
+    // getAllProjects(): Project[] {
+    //   return this.projects;
+    // }
+    createProject(payload: any):Observable<any>{
+      return this.httpClient.post<any>(this.apiURL + "api/CommentManagement/GetCommentDetails",payload);
+    }
+    getAllProjects(): Observable<any>  {
+      return this.httpClient.get<any>(this.apiURL + "api/CommentManagement/GetCommentDetails");
     }
     deleteProject(id: number): void {
       this.projects = this.projects.filter(project => project.id !== id);

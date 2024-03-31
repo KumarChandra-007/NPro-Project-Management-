@@ -146,10 +146,12 @@ export class TaskComponent implements OnInit {
   }
   getProjectList(){
     
-    this.projects = this.projectService.getAllProjects();
-    console.log(this.projects)
-   }
-
+    this.projectService.getAllProjects().subscribe(data=>
+       {
+         this.projects=data;
+       });
+     console.log(this.projects)
+    }
   // model-popup//
    openDialog(): void {
     const dialogRef = this.dialog.open(TaskDilougeComponent,{
