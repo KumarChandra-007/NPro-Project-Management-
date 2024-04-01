@@ -7,22 +7,21 @@
       <div class="logo w-100">
         <img src="../assets/logo.png" alt="">
       </div>
-      <ul>
-        
-        <li routerLinkActive="active" routerLink="/users-team"><a><i class="fa-solid fa-user"></i> Users/Team</a></li>
-        <li routerLinkActive="active" routerLink="/project"><a ><i class="fa-solid fa-diagram-project"></i> Project</a></li>
-        <li routerLinkActive="active" routerLink="/task"><a><i class="fas fa-tasks"></i> Task</a></li> 
-        <li routerLinkActive="active" routerLink="/dashboard"><a><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
-        <!-- <li><a routerLink="/login"><i class="fas fa-sign-out-alt login-icon"></i>Log out</a></li> -->
-   
-      </ul>
+      <ul> 
+  
+    <li (click)="navigateTo('user')" [class.active]="user"><a><i class="fa-solid fa-user"></i> Users/Team</a></li>
+    <li (click)="navigateTo('project')" [class.active]="project"><a><i class="fa-solid fa-diagram-project"></i> Project</a></li>
+    <li (click)="navigateTo('task')" [class.active]="task"><a><i class="fas fa-tasks"></i> Task</a></li> 
+    <li (click)="navigateTo('dashboard')" [class.active]="dashboard"><a><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+    <li><a routerLink="/login"><i class="fas fa-sign-out-alt login-icon"></i> Log out</a></li>  
+    </ul>
      </aside>
      <section class="h-100 p-2">
-     <!-- <app-users-team (click)="navigateToroute(type)"></app-users-team>
-     <app-project></app-project>
-     <app-task></app-task>
-     <app-dashboard></app-dashboard> -->
-     <router-outlet></router-outlet>
+      <app-users-team *ngIf="user"></app-users-team>
+      <app-project *ngIf="project"></app-project>
+      <app-task *ngIf="task"></app-task>
+      <app-dashboard *ngIf="dashboard"></app-dashboard>
+     
      </section>
     </div>
     

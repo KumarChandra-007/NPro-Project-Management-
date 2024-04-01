@@ -30,7 +30,8 @@ constructor(private router:Router, private auth:AuthService){
 
     this.auth.loginUser(credentials).subscribe((data: any) => {
       localStorage.setItem('userData', JSON.stringify(data)); 
-      this.router.navigate(['/home']); 
+      
+      this.router.navigate(['home']); 
   })
 };
 }

@@ -12,6 +12,18 @@ import { Router } from '@angular/router';
 export class HomeComponent {
   username: string = '';
   password: string = '';
+
+  user: boolean = false;
+  project: boolean = false;
+  task: boolean = false;
+  dashboard: boolean = false;
+
+  navigateTo(component: string) {
+    this.user = component === 'user';
+    this.project = component === 'project';
+    this.task = component === 'task';
+    this.dashboard = component === 'dashboard';
+  }
 constructor(private router:Router){
 
 }
@@ -21,18 +33,4 @@ showAside:boolean=true;
   arrowClick(){
     alert('this click');
 }
-
-// navigateToroute(type:any){
-//   switch(type){
-//     case "dashboard" : this.router.navigate(['/dashboard']);
-//     break;
-//     case "dashboard" : this.router.navigate(['/dashboard']);
-//     break;
-//     case "dashboard" : this.router.navigate(['/dashboard']);
-//     break;
-//     case "dashboard" : this.router.navigate(['/dashboard']);
-//     break;
-
-//   }
-// }
 }

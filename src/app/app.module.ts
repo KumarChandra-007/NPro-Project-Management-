@@ -65,6 +65,7 @@ import { HomeComponent } from './home/home.component';
   ],
   exports:[
     LoginComponent,
+    HomeComponent
     
   ],
   providers: [],
