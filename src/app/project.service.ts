@@ -11,6 +11,8 @@ export interface Project {
   startDate: Date;
   endDate: Date;
 }
+
+
 export interface Task {
   "TaskID": number;
   "Title": string,
@@ -67,8 +69,8 @@ export class ProjectService {
       return this.httpClient.get<any>("http://localhost:16737/projectapi/GetProjects");
       // return this.httpClient.get<any>(this.apiURL + "api/CommentManagement/GetCommentDetails");
     }
-    deleteProject(id: number): void {
-      this.projects = this.projects.filter(project => project.id !== id);
+    deleteProject(id: any): Observable<any> {
+      return this.httpClient.delete<any>(`http://localhost:16737/projectapi/DeleteProjectByIdAsync/${id}`);
     }
     updateProject(payload:any): Observable<any> {
       return this.httpClient.put<any>("http://localhost:16737/projectapi/PutProject",payload);
@@ -114,7 +116,10 @@ export class ProjectService {
       }
     
     ]
-
+getTaskcount(): Observable<any>  {
+  return this.httpClient.get<any>("http://localhost:5057/taskapi/gettaskcount");
+  // return this.httpClient.get<any>(this.apiURL + "api/CommentManagement/GetCommentDetails");
+}
     getAllTasks(): Task[] {
       return this.Tasks;
     }

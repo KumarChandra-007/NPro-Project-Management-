@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormControl, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ProjectService } from 'src/app/project.service';
+import { map } from 'rxjs/operators';
 // import { CsToastService } from '@cs/cs-response-controls';
 
 //import { setTimeout } from 'timers';
@@ -14,6 +15,12 @@ export interface Project {
   deadline: Date;
   creatorID:number;
   status:string;
+}
+export interface ProjectTaskCount
+{
+projectId:number;
+taskCount:number;
+
 }
 @Component({
   selector: 'app-project',
@@ -50,8 +57,10 @@ export class ProjectComponent implements OnInit {
         console.log(data);
         this.projects = data;
         console.log(this.projects);
+        this.gettaskCount();
       }
     );
+   
 
   }
 
@@ -96,11 +105,62 @@ export class ProjectComponent implements OnInit {
     });
   }
 
-  deleteProject(index: number): void {
+  deleteProject(data:any,index:number): void {
     this.projects.splice(index, 1);
     (this.projectForm.get('projects') as FormArray).removeAt(index);
     this.projectFormGroups.splice(index, 1); // Remove project form group from storage
+    this.projectService.deleteProject(data.projectID).subscribe(res=> {console.log(res);
+      this.editingIndex = 0;
+     this.getProjectData();
+
+  });
   }
+  gettaskCount(){
+    const control = <FormArray>this.projectForm.controls["projectID"];
+    this.projectService.getTaskcount().subscribe((data:ProjectTaskCount[])=>{
+      console.log(data);
+      debugger
+      for(var i=0;i<this.projects.length;i++)
+      {
+        for(var j=0;j<data.length;j++)
+        {
+          if(data[j].projectId==this.projects[i].projectID)
+          {
+            this.projects[i].taskCount=data[j].taskCount;
+            var projectsNew=this.projectForm.get('projects') as FormArray;
+            var grp = projectsNew.controls[i] as FormGroup;
+            var frm = grp.get('taskCount') as FormControl;
+            frm.patchValue(data[j].taskCount);
+            //this.projectForm.get('projects')?.controls[0].get('taskCount').patchValue(data[j].taskCount);
+          
+        }
+      }
+            // this.projectFormGroups.()[2].get('taskCount')?.patchValue(project.taskCount);
+          }
+        });
+
+      }
+
+  
+
+  // gettaskCount() {
+  //   this.projectService.getTaskcount().subscribe((data: ProjectTaskCount[]) => {
+  //     console.log(data);
+  //     this.projects.forEach((obj: any) => {
+  //       const projectID = obj.projectId;
+  //       const projectToUpdate = data.find(task => task.projectId === projectID);
+  //       if (projectToUpdate) {
+  //         const taskCount = projectToUpdate.taskCount;
+  //         obj.taskCount = taskCount;
+  //         const index = this.projects.findIndex(project => project.projectID === projectID);
+  //         if (index !== -1) {
+  //           this.projectFormGroups[index].get('taskCount')?.patchValue(taskCount);
+  //         }
+  //       }
+  //     });
+  //   });
+  // }
+  
  
   addRow(): void {
     const newProject: Project = {

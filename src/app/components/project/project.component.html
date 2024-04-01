@@ -19,7 +19,7 @@
           <td><input type="date" class="form-control" formControlName="startDate" [readonly]="!isEditing(i)"></td>
           <td><input type="date" class="form-control" formControlName="deadline" [readonly]="!isEditing(i)"></td>
           <td>
-            <span style="cursor:pointer" ><img alt="" (click)="deleteProject(i)" data-placement="bottom" tooltip="Remove"  [ngClass]="{'disabled': isEditing(i)}"
+            <span style="cursor:pointer" ><img alt="" (click)="deleteProject(projectCtrl.value,i)" data-placement="bottom" tooltip="Remove"  [ngClass]="{'disabled': isEditing(i)}"
               src="assets/delete_ico.svg"></span>
             <span style="cursor:pointer" > <img alt="" (click)="editProject(i)" data-placement="bottom" tooltip="Edit"  *ngIf="!isEditing(i)"
               src="assets/edit_ico.svg"></span><span></span>
