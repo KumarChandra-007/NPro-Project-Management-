@@ -7,11 +7,6 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'NproProjectManagementUI';
-  showAside:boolean=true;
-
-
-  arrowClick(){
-    alert('this click');
+  
 
   }
-}

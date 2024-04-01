@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 @Injectable({
@@ -6,18 +7,27 @@ import { Injectable } from '@angular/core';
 export class AuthService {
   private loggedIn = false;
   private username: string | undefined;
-  constructor() { }
+  readonly rootUrl = 'https://localhost:44303/';
+  constructor(private http: HttpClient) { }
 
 
-    // Simulate a login operation
-    login(username: string, password: string): boolean {
-      // Here you can implement your authentication logic
-      // For simplicity, I'm just setting loggedIn to true
-      this.loggedIn = true;
-      this.username = username;
-      return true;
+    // // Simulate a login operation
+    // login(username: string, password: string): boolean {
+    //   // Here you can implement your authentication logic
+    //   // For simplicity, I'm just setting loggedIn to true
+    //   this.loggedIn = true;
+    //   this.username = username;
+    //   return true;
+    // }
+
+    loginUser(user : any) {
+      const body = {
+        Email: user.email,
+        Password: user.password
+      };
+      console.log('test', body);
+      return this.http.get(this.rootUrl + 'api/account/authenticate?username='+user.username+'&password='+user.password);
     }
-
     // Check if user is logged in
   isLoggedIn(): boolean {
     return this.loggedIn;
