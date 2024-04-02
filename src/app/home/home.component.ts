@@ -12,7 +12,7 @@ import { Router } from '@angular/router';
 export class HomeComponent {
   username: string = '';
   password: string = '';
-
+  loggedInUser: string = '';
   user: boolean = false;
   project: boolean = false;
   task: boolean = false;
@@ -27,6 +27,14 @@ export class HomeComponent {
 constructor(private router:Router){
 
 }
+
+ngOnInit(): void {
+  const userObject = localStorage.getItem('userData');        
+  if (userObject) {      
+     this.loggedInUser = JSON.parse(userObject).username;  
+}
+}
+
 showAside:boolean=true;
 
 
@@ -34,3 +42,5 @@ showAside:boolean=true;
     alert('this click');
 }
 }
+     
+  

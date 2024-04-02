@@ -16,17 +16,17 @@
             
         </thead>
         <tbody>
-            <tr *ngFor="let data of employeeData">
-                <td>{{data.slNo}}</td>
+            <tr *ngFor="let data of employeeData; let i=index">
+                <td>{{i + 1}}</td>
                 <td>{{data.userId}}</td>
                 <td>{{data.firstName}}</td>
                 <td>{{data.lastName}}</td>
-                <td>{{data.jobTitleName}}</td>
-                <td>{{data.preferredFullName}}</td>
+                <td>{{data.roleName}}</td>
+                <td>{{ data.firstName + ' ' + data.lastName }}</td>
                 <td>{{data.employeeCode}}</td>
                 <td>{{data.region}}</td>
                 <td>{{data.phoneNumber}}</td>
-                <td>{{data.emailAddress}}</td>
+                <td>{{data.email}}</td>
             </tr>
         </tbody>
     </table>

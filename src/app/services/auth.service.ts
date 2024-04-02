@@ -26,7 +26,7 @@ export class AuthService {
         Password: user.password
       };
       console.log('test', body);
-      return this.http.get(this.rootUrl + 'api/account/authenticate?username='+user.username+'&password='+user.password);
+      return this.http.get(this.rootUrl + 'userapi/authenticate?username='+user.username+'&password='+user.password);
     }
     // Check if user is logged in
   isLoggedIn(): boolean {

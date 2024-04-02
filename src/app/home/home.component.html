@@ -8,7 +8,7 @@
         <img src="../assets/logo.png" alt="">
       </div>
       <ul> 
-  
+        <div><a><i class="fa-solid fa-user"></i> Welcome: {{loggedInUser}} </a></div>
     <li (click)="navigateTo('user')" [class.active]="user"><a><i class="fa-solid fa-user"></i> Users/Team</a></li>
     <li (click)="navigateTo('project')" [class.active]="project"><a><i class="fa-solid fa-diagram-project"></i> Project</a></li>
     <li (click)="navigateTo('task')" [class.active]="task"><a><i class="fas fa-tasks"></i> Task</a></li> 

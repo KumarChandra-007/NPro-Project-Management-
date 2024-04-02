@@ -28,6 +28,6 @@ export class UserTeamService {
         }        
         const headers = new HttpHeaders().set('Authorization', `Bearer ${this.token}`);
         console.log(headers);
-        return this.http.get(this.rootUrl + 'api/Account/GetAllUserDetails', { headers });        
+        return this.http.get(this.rootUrl + 'userapi/GetAllUserDetails', { headers });        
       }
   }
