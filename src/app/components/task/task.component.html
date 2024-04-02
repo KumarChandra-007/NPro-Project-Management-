@@ -1,10 +1,10 @@
 
 <div class="gray-bg">
   <mat-form-field class="flex-fill flex-grow-1">
-    <mat-label>Select Project</mat-label>
+    <mat-label >Select Project</mat-label>
     <mat-select [value]="selectedProject" [disabled]="isDropdownLoading">
-      <mat-option *ngFor="let project of projects" [value]="project.id">
-        {{ project.name }}
+      <mat-option *ngFor="let project of projects" [value]="project.projectID">
+        {{ project.title }}
       </mat-option>
     </mat-select>
   </mat-form-field>

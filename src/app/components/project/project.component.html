@@ -15,7 +15,7 @@
         <tr [formGroupName]="i">
           <td><input type="text" class="form-control" formControlName="title" [readonly]="!isEditing(i)"></td>
           <td><input type="text" class="form-control" formControlName="description" [readonly]="!isEditing(i)"></td>
-          <td><input type="number" class="form-control" formControlName="taskCount" (click)="navigateToTasks(projectCtrl.value.id)"  readonly></td>
+          <td><input type="number" class="form-control" formControlName="taskCount" (click)="navigateToTasks(projectCtrl.value.projectID)"  readonly></td>
           <td><input type="date" class="form-control" formControlName="startDate" [readonly]="!isEditing(i)"></td>
           <td><input type="date" class="form-control" formControlName="deadline" [readonly]="!isEditing(i)"></td>
           <td>
