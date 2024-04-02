@@ -163,8 +163,9 @@ export class TaskComponent implements OnInit {
   // model-popup//
    openDialog(): void {
     const dialogRef = this.dialog.open(TaskDilougeComponent,{
-      height: '400px',
+      height: '500px',
       width: '750px',
+      data:{params:this.projects}
     });
 
     dialogRef.afterClosed().subscribe(result => {

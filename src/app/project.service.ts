@@ -123,5 +123,16 @@ getTaskcount(): Observable<any>  {
     getAllTasks(): Task[] {
       return this.Tasks;
     }
+    getTasklistbyId(id:number):Observable<any> {
+      return this.httpClient.get<any>(`http://localhost:5057/taskapi/GetTaskDetailByProjectId/${id}`)
+    }
+    getAllComments():Observable<any>{
+      return this.httpClient.get<any>("https://localhost:7187/commentapi/GetCommentDetails")
+
+    }
+    getContributionbytaskId(id:number):Observable<any>{
+      return this.httpClient.get<any>(`http://localhost:5213/Contributionapi/GetContributionById/${id}`)
+
+    }
   }
   

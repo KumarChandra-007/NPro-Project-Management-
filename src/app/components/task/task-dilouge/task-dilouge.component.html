@@ -1,21 +1,19 @@
 <div class="container">
     <header>
         <div class="header">
-            <mat-form-field class="dropdown">
+            <mat-form-field class="dropdown1">
               <mat-label>Project</mat-label>
-              <mat-select>
+              <mat-select >
                 Options for projects
-                <mat-option value="all">VIDA WEB</mat-option>
-                <mat-option value="mine">CYCLUS</mat-option>
-                <!-- <mat-option *ngFor="let project of projects" [value]="project.id">{{ project.name }}</mat-option> -->
+                <mat-option *ngFor="let project of projects" [value]="project.projectID" (click)="fetchTasklist(project.projectID)">  {{ project.title }}</mat-option>
               </mat-select>
-            </mat-form-field>
-            <mat-form-field class="dropdown">
+            </mat-form-field >
+            <mat-form-field class="dropdown2">
               <mat-label>Task</mat-label>
               <mat-select>
-                <!-- Options for tasks -->
+                Options for tasks 
                 
-                <!-- <mat-option *ngFor="let task of tasks" [value]="task.id">{{ task.name }}</mat-option> -->
+                <mat-option *ngFor="let task of tasks" [value]="task.taskID" (click)="fetchContribution(task.taskID)">{{ task.title }}</mat-option> 
               </mat-select>
             </mat-form-field>
             <mat-form-field class="dropdown">
@@ -30,9 +28,14 @@
     <section class="d-flex">
 <div class="left w-50">
     <h3>Comments</h3>
-    <div class="editLogo">
-      <i class='fas fa-edit'></i>
+    <div *ngFor="let comment of comments" class="comment">
+      <p>{{ comment.content }}</p>
+      <button mat-icon-button >
+        <mat-icon class="editLogo"><i class='fas fa-edit'></i></mat-icon>
+      </button>
+      <mat-divider></mat-divider> 
     </div>
+    
     
 </div>
 <div class="right w-50">
