@@ -18,10 +18,23 @@ export class LoginComponent {
 constructor(private router:Router, private auth:AuthService){
 
 }
+ngOnInit(): void {
+  localStorage.clear()
+}
+
   login() {
+    const credentials = {
+      username : this.username,
+      password : this.password
+    };
  
     console.log('Username:', this.username);
     console.log('Password:', this.password);
-    this.router.navigate(['/main']); 
-  }
+
+    this.auth.loginUser(credentials).subscribe((data: any) => {
+      localStorage.setItem('userData', JSON.stringify(data)); 
+
+      this.router.navigate(['home']); 
+  })
+};
 }
