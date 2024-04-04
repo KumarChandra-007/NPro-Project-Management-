@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { API_GATEWAY } from 'src/environments/environment';
-import { HttpClient ,HttpHeaders} from '@angular/common/http';
+import { HttpClient ,HttpHeaders, HttpResponse} from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 export interface Project {
@@ -132,6 +132,13 @@ getTaskcount(): Observable<any>  {
     }
     getContributionbytaskId(id:number):Observable<any>{
       return this.httpClient.get<any>(`http://localhost:5213/Contributionapi/GetContributionById/${id}`)
+
+    }
+    getCommentById(id:number): Observable<any>{
+      return this.httpClient.get<any>(`https://localhost:7187/commentapi/GetCommentDetailById/${id}`)
+    }
+    saveComment(payload:any):Observable<HttpResponse<any>>{
+      return this.httpClient.post<any>("https://localhost:7187/commentapi/SaveCommentDetail",payload,{ observe:'response' });
 
     }
   }

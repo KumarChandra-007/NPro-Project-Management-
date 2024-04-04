@@ -1,48 +1,73 @@
 <div class="container">
-    <header>
-        <div class="header">
-            <mat-form-field class="dropdown1">
-              <mat-label>Project</mat-label>
-              <mat-select >
-                Options for projects
-                <mat-option *ngFor="let project of projects" [value]="project.projectID" (click)="fetchTasklist(project.projectID)">  {{ project.title }}</mat-option>
-              </mat-select>
-            </mat-form-field >
-            <mat-form-field class="dropdown2">
-              <mat-label>Task</mat-label>
-              <mat-select>
-                Options for tasks 
-                
-                <mat-option *ngFor="let task of tasks" [value]="task.taskID" (click)="fetchContribution(task.taskID)">{{ task.title }}</mat-option> 
-              </mat-select>
-            </mat-form-field>
-            <mat-form-field class="dropdown">
-              <mat-label>Overall Contributions</mat-label>
-              <mat-select>
-                <mat-option value="all">All</mat-option>
-                <mat-option value="mine">Mine</mat-option>
-              </mat-select>
-            </mat-form-field>
+  <header>
+      <div class="header">
+          <mat-form-field class="dropdown1">
+            <mat-label>Project</mat-label>
+            <mat-select >
+              Options for projects
+              <mat-option *ngFor="let project of projects" [value]="project.projectID" (click)="fetchTasklist(project.projectID)">  {{ project?.title }}</mat-option>
+            </mat-select>
+          </mat-form-field >
+          <mat-form-field class="dropdown2">
+            <mat-label>Task</mat-label>
+            <mat-select>
+              Options for tasks 
+              
+              <mat-option *ngFor="let task of tasks" [value]="task.taskID" (click)="fetchContribution(task.taskID)">{{ task?.title }}</mat-option> 
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field class="dropdown">
+            <mat-label>Overall Contributions</mat-label>
+            <mat-select>
+              <mat-option value="all">All</mat-option>
+              <mat-option value="mine">Mine</mat-option>
+            </mat-select>
+          </mat-form-field>
+      </div>
+  </header>
+  <section class="d-flex">
+      <div class="left w-50">
+          <h3>Comments</h3>
+          <div *ngFor="let comment of comments;let i=index "  class="comment">
+            <ng-container *ngIf="!editMode; else editModeTemplate">
+                <p>{{ comment.content }}</p>
+            </ng-container>
+            <ng-template #editModeTemplate>
+                <input type="text" [(ngModel)]="comment.content">
+                <button mat-icon-button (click)="saveComment(comment,i)">
+                    <i class='fas fa-save'></i>
+                </button>
+            </ng-template>
+            <button mat-icon-button (click)="toggleEditMode()">
+                <i class='fas fa-edit'></i>
+            </button>
+            <mat-divider></mat-divider> 
+        </div>
+        
+        
+        
+          <!-- <div *ngFor="let comment of comments" class="comment">
+              <p>{{ comment?.content }}</p>
+              <button mat-icon-button >
+                  <mat-icon class="editLogo"  (click)="toggleEditMode()"><i class='fas fa-edit'></i></mat-icon>
+              </button>
+              <mat-divider></mat-divider> 
+          </div> -->
+          <mat-divider></mat-divider> 
+      </div>
+      <div class="right w-50">
+          <h3>Contributions</h3>
+          <div class="contributions-info">
+              <!-- Use ngIf to ensure description and time spent are displayed only when contributions exist -->
+              <ng-container *ngIf="contributions">
+                  <p class="description">&#8226; {{ contributions.description }}</p>
+                  <div class="time-box">
+                      <span>{{ contributions.timeSpent }}</span>
+                  </div>
+              </ng-container>
           </div>
-    </header>
-    <section class="d-flex">
-<div class="left w-50">
-    <h3>Comments</h3>
-    <div *ngFor="let comment of comments" class="comment">
-      <p>{{ comment.content }}</p>
-      <button mat-icon-button >
-        <mat-icon class="editLogo"><i class='fas fa-edit'></i></mat-icon>
-      </button>
-      <mat-divider></mat-divider> 
-    </div>
-    
-    
-</div>
-<div class="right w-50">
-    <h3>Contributions</h3>
-</div>
-    </section>
+      </div>
+  </section>
 </div>
 
-  
 <button mat-button [mat-dialog-close]="true" cdkFocusInitial>Ok</button>

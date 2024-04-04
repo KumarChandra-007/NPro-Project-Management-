@@ -1,31 +1,47 @@
-.mat-button{
-    margin-top:200px;
+.container {
+    padding: 20px;
 }
-header {
+
+.header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 20px;
-  }
-  
-  .dropdown1,
-  .dropdown2,
-  .dropdown {
+}
+
+.dropdown1,
+.dropdown2,
+.dropdown {
+    flex: 1;
     margin-right: 20px;
-  }
-  .comment {
+}
+
+.comment {
     display: flex;
     align-items: center;
     margin-bottom: 10px;
-  }
-  
-  .comment p {
+}
+
+.comment p {
     flex: 1;
-  }
-  
-  
- .editLogo{
+    margin-right: 10px;
+}
+
+.editLogo {
     font-size: 18px;
- }
-  
-  
+}
+
+.contributions-info {
+    display: flex;
+    align-items: center;
+}
+
+.description {
+    margin-right: 20px;
+}
+
+.time-box {
+    background-color: #ccc;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
