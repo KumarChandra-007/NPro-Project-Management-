@@ -25,11 +25,12 @@ import { HttpClientModule } from '@angular/common/http';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDialogModule } from '@angular/material/dialog';
 import { TaskDilougeComponent } from './components/task/task-dilouge/task-dilouge.component';
-
+import { HomeComponent } from './home/home.component';
 
 @NgModule({
   declarations: [
     AppComponent,
+    HomeComponent,
     UsersTeamComponent,
     ProjectComponent,
     TaskComponent,
@@ -61,10 +62,11 @@ import { TaskDilougeComponent } from './components/task/task-dilouge/task-diloug
     MatSelectModule,
      MatDialogModule
   ],
-  // exports:[
-  //   LoginComponent,
+  exports:[
+    LoginComponent,
+    HomeComponent
     
-  // ],
+  ],
   providers: [],
   bootstrap: [AppComponent]
 })
