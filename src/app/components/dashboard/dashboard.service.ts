@@ -1,11 +1,18 @@
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-
+import { Observable } from 'rxjs';
+import {AllProjectInfo} from '../dashboard/dashboard.component'
 @Injectable({
   providedIn: 'root'
 })
 export class DashboardService {
+  readonly rootUrl = 'https://localhost:44303/';
 
-  constructor() { }
+  constructor(private http:HttpClient) { }
+
+  getProjectDetails() {
+    return this.http.get<AllProjectInfo>(this.rootUrl + 'userapi/GetProjectUserTaskMapping');        
+  }
 
   bigChart() {
     return [{

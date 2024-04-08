@@ -1,14 +1,26 @@
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormControl, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ProjectService } from 'src/app/project.service';
+import { map } from 'rxjs/operators';
+// import { CsToastService } from '@cs/cs-response-controls';
+
+//import { setTimeout } from 'timers';
 export interface Project {
-  id: number;
-  name: string;
+  projectID: number;
+  title: string;
   description: string;
   taskCount: number;
   startDate: Date;
-  endDate: Date;
+  deadline: Date;
+  creatorID:number;
+  status:string;
+}
+export interface ProjectTaskCount
+{
+projectId:number;
+taskCount:number;
+
 }
 @Component({
   selector: 'app-project',
@@ -20,53 +32,146 @@ export class ProjectComponent implements OnInit {
   projectForm!: FormGroup;
   projectFormGroups: FormGroup[] = []; // Store project form groups
   editingIndex!: number;
-
-  constructor(private projectService: ProjectService, private formBuilder: FormBuilder, private router: Router) {}
+  initCount:number=0;
+  constructor(private projectService: ProjectService, private formBuilder: FormBuilder, private router: Router,
+   ) {}
 
   ngOnInit(): void {
-    this.projects = this.projectService.getAllProjects();
+    this.getProjectData();
+      
+  }
+  ngDoCheck():void
+  {
+    // debugger;
+    this.initCount++;
+    if(this.initCount<=3)
+    {
     this.initForm();
-    // this.editingIndex=0;
+    }
+  }
+  
+  getProjectData() {
+    //debugger
+    this.projectService.getAllProjects().subscribe(
+      (data: Project[]) => {
+        console.log(data);
+        this.projects = data;
+        console.log(this.projects);
+        this.gettaskCount();
+      }
+    );
    
+
   }
 
-  initForm(): void {
+  // initForm(){
+    
+  //   this.projectForm = this.formBuilder.group({
+  //     projects: this.formBuilder.array([])
+  //   });
+  //   this.projects.forEach(project => {
+  //     console.log(project);
+  //     const projectFormGroup = this.createProjectFormGroup(project);
+  //     (this.projectForm.get('projects') as FormArray).push(projectFormGroup);
+  //     this.projectFormGroups.push(projectFormGroup); 
+  //   });
+  //  console.log(this.projectsFormArray);
+  //  return 1;
+  // }
+
+  initForm() {
     this.projectForm = this.formBuilder.group({
-      projects: this.formBuilder.array([])
+      projects: this.formBuilder.array([]) // Initialize projects form array
     });
+
     this.projects.forEach(project => {
       const projectFormGroup = this.createProjectFormGroup(project);
       (this.projectForm.get('projects') as FormArray).push(projectFormGroup);
       this.projectFormGroups.push(projectFormGroup); // Store project form group
     });
-   console.log(this.projectsFormArray);
+    //this.isfirst=false;
+    console.log(this.projectForm.value); // Log the form value to check
+    return 1; // Return a value if needed
   }
 
   createProjectFormGroup(project: Project): FormGroup {
     return this.formBuilder.group({
-      id: [project.id],
-      name: [project.name, Validators.required],
+      projectID: [project.projectID],
+      title: [project.title, Validators.required],
       description: [project.description, Validators.required],
       taskCount: [project.taskCount, Validators.required],
-      startDate: [project.startDate.toISOString().substring(0, 10), Validators.required],
-      endDate: [project.endDate.toISOString().substring(0, 10), Validators.required]
+      startDate: [project.startDate.toString().substring(0, 10), Validators.required],
+      deadline: [project.deadline.toString().substring(0, 10), Validators.required]
     });
   }
 
-  deleteProject(index: number): void {
+  deleteProject(data:any,index:number): void {
     this.projects.splice(index, 1);
     (this.projectForm.get('projects') as FormArray).removeAt(index);
     this.projectFormGroups.splice(index, 1); // Remove project form group from storage
+    this.projectService.deleteProject(data.projectID).subscribe(res=> {console.log(res);
+      this.editingIndex = 0;
+     this.getProjectData();
+
+  });
   }
+  gettaskCount(){
+    const control = <FormArray>this.projectForm.controls["projectID"];
+    this.projectService.getTaskcount().subscribe((data:ProjectTaskCount[])=>{
+      console.log(data);
+      debugger
+      for(var i=0;i<this.projects.length;i++)
+      {
+        for(var j=0;j<data.length;j++)
+        {
+          if(data[j].projectId==this.projects[i].projectID)
+          {
+            this.projects[i].taskCount=data[j].taskCount;
+            var projectsNew=this.projectForm.get('projects') as FormArray;
+            var grp = projectsNew.controls[i] as FormGroup;
+            var frm = grp.get('taskCount') as FormControl;
+            frm.patchValue(data[j].taskCount);
+            //this.projectForm.get('projects')?.controls[0].get('taskCount').patchValue(data[j].taskCount);
+          
+        }
+      }
+            // this.projectFormGroups.()[2].get('taskCount')?.patchValue(project.taskCount);
+          }
+        });
+
+      }
+
+  
+
+  // gettaskCount() {
+  //   this.projectService.getTaskcount().subscribe((data: ProjectTaskCount[]) => {
+  //     console.log(data);
+  //     this.projects.forEach((obj: any) => {
+  //       const projectID = obj.projectId;
+  //       const projectToUpdate = data.find(task => task.projectId === projectID);
+  //       if (projectToUpdate) {
+  //         const taskCount = projectToUpdate.taskCount;
+  //         obj.taskCount = taskCount;
+  //         const index = this.projects.findIndex(project => project.projectID === projectID);
+  //         if (index !== -1) {
+  //           this.projectFormGroups[index].get('taskCount')?.patchValue(taskCount);
+  //         }
+  //       }
+  //     });
+  //   });
+  // }
+  
  
   addRow(): void {
     const newProject: Project = {
-      id: this.projects.length + 1,
-      name: '',
+      projectID: 0,
+      title: '',
       description: '',
       taskCount: 0,
       startDate: new Date(),
-      endDate: new Date()
+      deadline: new Date(),
+      creatorID:0,
+      status:""
     };
   
     this.projects.push(newProject);
@@ -82,10 +187,35 @@ export class ProjectComponent implements OnInit {
     return this.editingIndex === index;
   }
 
-  saveProject(index: number): void {
-    // Save project logic
-    this.editingIndex = 0;
-    const projectFormGroup = this.projectFormGroups[index];
+  saveProject(data:any): void {
+    console.log(data)
+    let payload={
+      projectID :data.projectID, 
+      title:data.title,
+      description:data.title,
+      startDate: data.startDate,
+      deadline:data.deadline,
+      status: "open",
+      creatorID: 1
+    }
+    debugger
+    if(data.projectID ==0){
+    this.projectService.createProject(payload).subscribe(res=> {console.log(res);
+      this.editingIndex = 0;
+     this.getProjectData();
+
+  });
+       const projectFormGroup = this.projectFormGroups[data.ProjectID];
+    }
+    else{
+      this.projectService.updateProject(payload).subscribe(res=> {console.log(res);
+        this.editingIndex = 0;
+        this.getProjectData();
+       
+    })
+
+      ;
+    }
     // if (projectFormGroup) {
     //   // projectFormGroup.disable();
     // }
@@ -96,7 +226,7 @@ export class ProjectComponent implements OnInit {
     this.projectFormGroups[index].enable();
   }
   navigateToTasks(projectCtrl: any): void {
-    debugger
+    // debugger
     console.log(projectCtrl);
     this.router.navigate(['task'], { queryParams: { id: projectCtrl } });
   }

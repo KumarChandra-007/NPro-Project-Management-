@@ -1,4 +1,8 @@
 import { Injectable } from '@angular/core';
+import { API_GATEWAY } from 'src/environments/environment';
+import { HttpClient ,HttpHeaders, HttpResponse} from '@angular/common/http';
+import { Observable } from 'rxjs';
+
 export interface Project {
   id: number;
   name: string;
@@ -7,6 +11,8 @@ export interface Project {
   startDate: Date;
   endDate: Date;
 }
+
+
 export interface Task {
   "TaskID": number;
   "Title": string,
@@ -22,7 +28,7 @@ export interface Task {
 })
 
 export class ProjectService {
-
+  private apiURL = API_GATEWAY.PROJECT_URL;
   
     projects: Project[] = [
       {
@@ -51,19 +57,24 @@ export class ProjectService {
       }
     ];
   
-    constructor() { }
+    constructor(private httpClient: HttpClient) { }
   
-    getAllProjects(): Project[] {
-      return this.projects;
+    // getAllProjects(): Project[] {
+    //   return this.projects;
+    // }
+    createProject(payload: any):Observable<any>{
+      return this.httpClient.post<any>("http://localhost:16737/projectapi/PostProject",payload);
     }
-    deleteProject(id: number): void {
-      this.projects = this.projects.filter(project => project.id !== id);
+    getAllProjects(): Observable<any>  {
+      return this.httpClient.get<any>("http://localhost:16737/projectapi/GetProjects");
+      // return this.httpClient.get<any>(this.apiURL + "api/CommentManagement/GetCommentDetails");
     }
-    updateProject(updatedProject: Project): void {
-      const index = this.projects.findIndex(project => project.id === updatedProject.id);
-      if (index !== -1) {
-        this.projects[index] = updatedProject;
-      }
+    deleteProject(id: any): Observable<any> {
+      return this.httpClient.delete<any>(`http://localhost:16737/projectapi/DeleteProjectByIdAsync/${id}`);
+    }
+    updateProject(payload:any): Observable<any> {
+      return this.httpClient.put<any>("http://localhost:16737/projectapi/PutProject",payload);
+      
     }
     Tasks:Task[]=
     [
@@ -105,9 +116,30 @@ export class ProjectService {
       }
     
     ]
-
+getTaskcount(): Observable<any>  {
+  return this.httpClient.get<any>("http://localhost:5057/taskapi/gettaskcount");
+  // return this.httpClient.get<any>(this.apiURL + "api/CommentManagement/GetCommentDetails");
+}
     getAllTasks(): Task[] {
       return this.Tasks;
+    }
+    getTasklistbyId(id:number):Observable<any> {
+      return this.httpClient.get<any>(`http://localhost:5057/taskapi/GetTaskDetailByProjectId/${id}`)
+    }
+    getAllComments():Observable<any>{
+      return this.httpClient.get<any>("https://localhost:7187/commentapi/GetCommentDetails")
+
+    }
+    getContributionbytaskId(id:number):Observable<any>{
+      return this.httpClient.get<any>(`http://localhost:5213/Contributionapi/GetContributionById/${id}`)
+
+    }
+    getCommentById(id:number): Observable<any>{
+      return this.httpClient.get<any>(`https://localhost:7187/commentapi/GetCommentDetailById/${id}`)
+    }
+    saveComment(payload:any):Observable<HttpResponse<any>>{
+      return this.httpClient.post<any>("https://localhost:7187/commentapi/SaveCommentDetail",payload,{ observe:'response' });
+
     }
   }
   

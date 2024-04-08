@@ -6,8 +6,8 @@ export const environment = {
   production: false
 };
 export const API_GATEWAY = {
-  User_URL: "http://localhost:13416/",
-  
+  PROJECT_URL: "https://localhost:7187/",
+  USER_URL: "http://localhost:13416/"
 }
 // api/
 /*

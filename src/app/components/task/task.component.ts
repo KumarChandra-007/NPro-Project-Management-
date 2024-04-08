@@ -1,13 +1,22 @@
 import { Component, OnInit,  ViewChild, TemplateRef } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ProjectService,Project } from 'src/app/project.service';
+import { ProjectService } from 'src/app/project.service';
 import {  MatDialogRef } from '@angular/material/dialog';
 import { MatDialog } from '@angular/material/dialog';
 import { TaskDilougeComponent } from './task-dilouge/task-dilouge.component';
 //import { ModalPopupComponent } from './components/modal-popup/modal-popup.component';
 
-
+export interface Project {
+  projectID: number;
+  title: string;
+  description: string;
+  taskCount: number;
+  startDate: Date;
+  deadline: Date;
+  creatorID:number;
+  status:string;
+}
 export interface Task {
   "TaskID": number;
   "Title": string,
@@ -146,15 +155,17 @@ export class TaskComponent implements OnInit {
   }
   getProjectList(){
     
-    this.projects = this.projectService.getAllProjects();
+   this.projectService.getAllProjects().subscribe(data=>
+    this.projects=data);
     console.log(this.projects)
    }
 
   // model-popup//
    openDialog(): void {
     const dialogRef = this.dialog.open(TaskDilougeComponent,{
-      height: '400px',
+      height: '500px',
       width: '750px',
+      data:{params:this.projects}
     });
 
     dialogRef.afterClosed().subscribe(result => {
