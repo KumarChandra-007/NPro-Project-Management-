@@ -1,12 +1,14 @@
 import { Component, OnInit,  ViewChild, TemplateRef } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ProjectService } from 'src/app/project.service';
+import { ProjectService} from 'src/app/project.service';
 import {  MatDialogRef } from '@angular/material/dialog';
 import { MatDialog } from '@angular/material/dialog';
 import { TaskDilougeComponent } from './task-dilouge/task-dilouge.component';
-//import { ModalPopupComponent } from './components/modal-popup/modal-popup.component';
+// import { Project } from '../project/project.component';
 
+//import { Console } from 'console';
+//import { ModalPopupComponent } from './components/modal-popup/modal-popup.component';
 export interface Project {
   projectID: number;
   title: string;
@@ -17,16 +19,18 @@ export interface Project {
   creatorID:number;
   status:string;
 }
+
 export interface Task {
-  "TaskID": number;
-  "Title": string,
-  "Description": string,
-  "Status": number,
-  "Deadline": Date,
-  "ProjectID": number,
-  "RecordCount" : number
   
+    taskID: number,
+    title: string,
+    description: string,
+    status: number,
+    deadline: Date,
+    projectID: number,
+    taskCount: number
 }
+
 @Component({
   selector: 'app-task',
   templateUrl: './task.component.html',
@@ -45,12 +49,22 @@ export class TaskComponent implements OnInit {
   projectId: number | undefined;
  // @ViewChild('modalContent') modalContent!: TemplateRef<any>;
   dialogRef!: MatDialogRef<any>;
+  initCount: number=0;
 
   constructor(private projectService: ProjectService, private formBuilder: FormBuilder, private route: ActivatedRoute,private dialog: MatDialog) { }
-
-  ngOnInit(): void {
-    this.tasks = this.projectService.getAllTasks();
+  ngDoCheck():void
+  {
+    //this.initCount++;
+    //if(this.initCount<=3)
+    //{
+      debugger;
     this.initForm();
+    //}
+  }
+  ngOnInit(): void {
+    // this.tasks = this.projectService.getAllTasks();
+    this.gettaskdetails();
+    // this.initForm();
     this.getProjectList();
     this.fetchDefaultProject();
   
@@ -63,6 +77,37 @@ export class TaskComponent implements OnInit {
     { label: 'QA', value: 4 }
   ];
 
+  gettaskdetails()
+  {
+    this.projectService.getAllTasks().subscribe((data:Task[])=>
+    {
+    console.log(data);
+    this.tasks=data;
+    console.log(this.tasks);
+    })
+  }
+  // SaveTask(): void {
+  //   const formData = this.taskForm.value;
+    
+  //   console.log(formData); // You can further process or send this data to your backend
+  // }
+  gettaskDetailById(id:number){
+this.projectService.getTasklistbyId(id).subscribe((data:Task[])=>
+  {
+    debugger;
+  console.log(data);
+  this.tasks=data;
+  console.log(this.tasks);
+  }) }
+  Save(): void {
+    const formData = this.taskForm.value;
+    console.log(formData); // You can further process or send this data to your backend
+    this.projectService.saveTaskDetails(formData).subscribe(response => {
+      console.log(response); // Handle response from server
+    // }, error => {
+    //   console.error(error); // Handle error
+    });
+  }
   initForm(): void {
     this.taskForm = this.formBuilder.group({
       tasks: this.formBuilder.array([])
@@ -77,10 +122,11 @@ export class TaskComponent implements OnInit {
 
   createTaskFormGroup(task: Task): FormGroup {
     return this.formBuilder.group({
-      name: [task.Title, Validators.required],
-      AcceptanceDesc: [task.Description, Validators.required],
+      taskId: [task.taskID],
+      title: [task.title, Validators.required],
+      description: [task.description, Validators.required],
       Signoff: [false, Validators.required],
-      status: [task.Status, Validators.required],
+      status: [task.status, Validators.required],
     });
   }
   deleteProject(index: number): void {
@@ -91,24 +137,23 @@ export class TaskComponent implements OnInit {
  
   addRow(): void {
     const newtask: Task = {
-      "TaskID": 0,
-  "Title": " ",
-  "Description": "",
-  "Status": 0,
-  "Deadline":new Date,
-  "ProjectID": 0,
-  "RecordCount" : 1
+      "taskID": 0,
+  "title": " ",
+  "description": "",
+  "status": 0,
+  "deadline":new Date,
+  "projectID": 0,
+  "taskCount" : 1
   
 };
-  
     this.tasks.push(newtask);
-  
     const taskFormGroup = this.createTaskFormGroup(newtask);
     (this.taskForm.get('tasks') as FormArray).push(taskFormGroup);
   
     this.editingIndex = this.tasks.length - 1; // Set editing index to the newly added project
     // this.saveProject(this.editingIndex);
   }
+  
   fetchDefaultProject(){
     this.route.queryParams.subscribe(params => {
       this.projectId = params['id'];
@@ -151,21 +196,27 @@ export class TaskComponent implements OnInit {
   }
 
   get tasksFormArray(): FormArray {
+    console.log(this.taskForm);
+
     return this.taskForm.get('tasks') as FormArray;
   }
   getProjectList(){
     
-   this.projectService.getAllProjects().subscribe(data=>
-    this.projects=data);
+    this.projectService.getAllProjects().subscribe(
+      (data: Project[]) => {
+        console.log(data);
+        this.projects = data;
+        console.log(this.projects);
+      }
+    );
     console.log(this.projects)
    }
 
   // model-popup//
    openDialog(): void {
     const dialogRef = this.dialog.open(TaskDilougeComponent,{
-      height: '500px',
+      height: '400px',
       width: '750px',
-      data:{params:this.projects}
     });
 
     dialogRef.afterClosed().subscribe(result => {

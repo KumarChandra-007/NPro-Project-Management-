@@ -1,9 +1,9 @@
 
 <div class="gray-bg">
   <mat-form-field class="flex-fill flex-grow-1">
-    <mat-label >Select Project</mat-label>
+    <mat-label>Select Project</mat-label>
     <mat-select [value]="selectedProject" [disabled]="isDropdownLoading">
-      <mat-option *ngFor="let project of projects" [value]="project.projectID">
+      <mat-option *ngFor="let project of projects" [value]="project.projectID" (click)="gettaskDetailById(project.projectID)">
         {{ project.title }}
       </mat-option>
     </mat-select>
@@ -15,50 +15,58 @@
 <!-- <div>
     <label for="projects">Select Project:</label>
     <select id="projects" [(ngModel)]="selectedProject">
-      <option *ngFor="let project of projects" [value]="project.id">{{ project.name }}</option>
+      <option *ngFor="let project of projects" [value]="project.id">{{ project.title }}</option>
     </select>
   </div> -->
   
 
-<form [formGroup]="taskForm" class="h-100 user-container">
+  <form [formGroup]="taskForm" class="h-100 user-container">
     <table class="w-100 table-responsive table table-striped">
       <thead class="tableHeader">
         <tr class="bg-primary">
+          <!-- Hidden column header for TaskId -->
+          <!-- <th scope="col" >TaskId</th> -->
           <th scope="col">Task</th>
           <th scope="col">Acceptance Criteria Details</th>
           <th scope="col">Signoff</th>
-          <th scope="col">status</th>
+          <th scope="col">Status</th>
           <th scope="col">Action</th>
-          
         </tr>
       </thead>
       <tbody formArrayName="tasks">
         <ng-container *ngFor="let projectCtrl of tasksFormArray.controls; let i = index">
           <tr [formGroupName]="i">
-            <td><input type="text" class="form-control" formControlName="name" [readonly]="!isEditing(i)"></td>
-            <td><input type="text" class="form-control" formControlName="AcceptanceDesc" [readonly]="!isEditing(i)"></td>
+            <!-- Bind taskId to a hidden input field in the same row -->
+            <!-- <input type="hidden" [formControlName]="'taskId'" value="{{ projectCtrl.value.taskId }}"> -->
+            <!-- <td><input type="text" class="form-control" formControlName="taskId" [readonly]="!isEditing(i)"></td> -->
+            <td><input type="text" class="form-control" formControlName="title" [readonly]="!isEditing(i)"></td>
+            <td><input type="text" class="form-control" formControlName="description" [readonly]="!isEditing(i)"></td>
             <td><input type="checkbox" class="form-check-input custom-checkbox" formControlName="Signoff" [readonly]="!isEditing(i)"></td>
             <td>
-                <select class="form-control" formControlName="status" [disabled]="!isEditing(i)">
-                  <option *ngFor="let status of statusOptions" [value]="status.value">{{ status.label }}</option>
-                </select>
-              </td> 
-              <td>       
+              <select class="form-control" formControlName="status" [disabled]="!isEditing(i)">
+                <option *ngFor="let status of statusOptions" [value]="status.value">{{ status.label }}</option>
+              </select>
+            </td> 
+            <td>       
               <span style="cursor:pointer" ><img alt="" (click)="deleteProject(i)" data-placement="bottom" tooltip="Remove"  [ngClass]="{'disabled': isEditing(i)}"
                 src="assets/delete_ico.svg"></span>
               <span style="cursor:pointer" > <img alt="" (click)="editProject(i)" data-placement="bottom" tooltip="Edit"  *ngIf="!isEditing(i)"
                 src="assets/edit_ico.svg"></span><span></span>
-                <span style="cursor:pointer" > <img alt=""  data-placement="bottom" *ngIf="!isEditing(i)" tooltip="Details"
+              <span style="cursor:pointer" > <img alt=""  data-placement="bottom" *ngIf="!isEditing(i)" tooltip="Details"
                   src="assets/lines_dot.svg" (click)="openDialog()"></span>
-              <!-- <button type="button" class="btn btn-success" (click)="saveProject(i)" *ngIf="isEditing(i)">Save</button> -->
               <button type="button" class="btn btn-secondary pointer" (click)="cancelEdit(i)"*ngIf="isEditing(i)">Cancel</button>
             </td>
           </tr>
         </ng-container>
       </tbody>
     </table>
-    <button type="button" class="btn" (click)="addRow()">Add Row</button>
+    <div style="display: inline-block; margin-right: 10px;">
+      <button type="button" class="btn" (click)="addRow()">Add Row</button>
+    </div>
+    
+    <div style="display: inline-block;">
+      <button type="button" class="btn" (click)="Save()">Save</button>
+    </div>
   </form>
-  
   
   

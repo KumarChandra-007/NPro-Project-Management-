@@ -120,8 +120,9 @@ getTaskcount(): Observable<any>  {
   return this.httpClient.get<any>("http://localhost:5057/taskapi/gettaskcount");
   // return this.httpClient.get<any>(this.apiURL + "api/CommentManagement/GetCommentDetails");
 }
-    getAllTasks(): Task[] {
-      return this.Tasks;
+
+ getAllTasks(): Observable<any>  {
+      return this.httpClient.get<any>( "http://localhost:5057/TaskApi/GetTaskDetails");
     }
     getTasklistbyId(id:number):Observable<any> {
       return this.httpClient.get<any>(`http://localhost:5057/taskapi/GetTaskDetailByProjectId/${id}`)
@@ -139,7 +140,26 @@ getTaskcount(): Observable<any>  {
     }
     saveComment(payload:any):Observable<HttpResponse<any>>{
       return this.httpClient.post<any>("https://localhost:7187/commentapi/SaveCommentDetail",payload,{ observe:'response' });
-
+    }
+    // saveTaskDetails(formData: Task): Observable<any> {
+    //   debugger;
+    //   return this.httpClient.post<any>("https://localhost:7047/api/TaskManagement/SaveTaskDetail", formData);
+    // }
+    private httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json', // Set Content-Type to JSON
+        'charset':'us-ascii'
+        
+      })
+    };
+    
+    saveTaskDetails(formData: Task): Observable<any> {
+      debugger;
+      return this.httpClient.post<any>(
+        "https://localhost:44335/TaskApi/SaveTaskDetail",
+        formData,
+        this.httpOptions  // Pass the options containing headers
+      );
     }
   }
   

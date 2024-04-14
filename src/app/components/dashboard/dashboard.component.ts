@@ -37,17 +37,25 @@ export class DashboardComponent implements OnInit,AfterViewInit {
   selectedProject:number=0;
   gridInfo: ProjectGrid[]=[];
   StatusPercentages:any=[];
-  projects!:AllProjectInfo;
+  projects:AllProjectInfo={AllProjectCount:0,
+    AllTaskCount:0,
+    CompletedTaskCount:0,
+    PendingTaskCount:0,
+    ProjectUserTaskGridInfo:[]};
   bigChart:any = [];
   cards:any = [];
   pieChart:any = [];
   displayedColumns: string[] = ['position', 'name', 'noofusers', 'nooftasks'];
   dataSource = new MatTableDataSource<ProjectGrid>([]);
   @ViewChild(MatPaginator, { static: true }) paginator: any ;
-
   constructor(private dashboardService: DashboardService) { }
 
   ngOnInit() {
+    this.projects.ProjectUserTaskGridInfo.push({ProjectId:0,
+      Title:'',
+      UserCount:0,
+      TaskCount:0,
+      StatusPercentage:''});
     this.getProjectDetails();
     this.bigChart = this.dashboardService.bigChart();
     this.cards = this.dashboardService.cards();
